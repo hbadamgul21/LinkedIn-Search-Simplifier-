@@ -37,6 +37,8 @@ NOTE: No need for periods at the end of the keywords, and most importantly don't
 After the green progress bar loads, you can then exit out of the program and the "Results.txt" should appear in the same folder. 
 Open it, and you will get your desired outcome.
 
+IMPORTANT: As of now, since I manually implemented a progress bar for the first time in GUI, it can handle about 300 search results. Also, sometimes it freezes, just restart the app. 
+
 Of course, you can tweak the keyword further if some things managed to slip past. Then, you can have them side by side with the LinkedIn open one one side and your text open on the other.
 Then, you can use ctrl-f to find the desire names from your 
 "Results.txt" file. Tip: on the website of LinkedIn, make sure to load all the "more button" first, before using ctrl-f.  
@@ -45,6 +47,7 @@ That's it!
 
 -------------------------------------------------------------------------------
 
+UPDATE: Commented out the GUI, you can use more search results (ex. 1000) with the command line only.
 
 Usage with the command line:
 
