@@ -10,7 +10,7 @@ import re
 
 
 class LinkedInSearchSimplifier:
-    def __init__(self, url):
+    def __init__(self, url, t, d, c):
         self.options = Options()
         self.options.headless = True
         self.options.add_argument("--log-level=3")
@@ -25,7 +25,7 @@ class LinkedInSearchSimplifier:
         self.Get_All_The_Pages_Loaded()
         sleep(1.5)
         self.soup = bs4.BeautifulSoup(self.driver.page_source, 'html.parser')
-        self.Get_All_The_Data()
+        self.Get_All_The_Data(t, d, c)
         self.PrintEndNumResults()
         self.QuitDriver()
         
@@ -41,7 +41,7 @@ class LinkedInSearchSimplifier:
                 page_num += 1
                 #page = tk.Label(window, text="Number of pages we are getting: " + str(page_num))
                 #page.grid(row = 6, column = 0)
-                print("Page number: "+str(page_num))
+                print("Number of pages clicked: "+str(page_num))
                 sleep(1)
             except NoSuchElementException:
                 break
@@ -49,7 +49,7 @@ class LinkedInSearchSimplifier:
             
     #Grab the data we need, and perform certain actions to get the title, company name, and their descriptions. 
     #Then we manipulate the title, company name, and description to omit keywords and store the results in a .txt file.
-    def Get_All_The_Data(self):
+    def Get_All_The_Data(self, t, d, c):
         global links 
         links = []
         global original 
@@ -62,20 +62,40 @@ class LinkedInSearchSimplifier:
             #self.Bar()
             #window.update()
             for items in subSOUP.findAll(class_='core-rail'):
-                title = items.find(class_="topcard__title").get_text(strip=True)
-                company = items.find(class_="topcard__flavor").get_text(strip=True)
-                desc = items.find(class_="description__text description__text--rich").get_text(strip=True)
-                s1 = re.findall("Sales|Manager|Lead|Senior|Mid-Level|Sr.|Sr|SR|SR.|Angular|React|Contract", title)
-                #s1 = re.findall(t, title)
-                s2 = re.findall("[1-9]-[1-9]|\d years|\d\+|5 plus|Sr.|Senior|Contract|12 months|\+ year's|contract|\+ Years|\+ years", desc)
-                #s2 = re.findall(d, desc)
-                s3 = re.findall("The Job Network|Revature|Kelly Services", company)
-                #s3 = re.findall(c, company)
+                title_1 = items.find(class_="topcard__title")
+                company_1 = items.find(class_="topcard__flavor")
+                desc_1 = items.find(class_="description__text description__text--rich")
+                #Error checking the none type error, and handling it. 
+                #That way the program won't crash or stop.     
+                if title_1 is not None:
+                    title = title_1.get_text(strip=True)
+                else:
+                    title = ''
+                    print()
+                    print("NoneType in title \n")
+                if company_1 is not None:
+                    company = company_1.get_text(strip=True)
+                else:
+                    company = ''
+                    print("NoneType in company \n")
+                if desc_1 is not None:
+                    desc = desc_1.get_text(strip=True)
+                else:
+                    desc = ''
+                    print("NoneType in desc \n")
+                
+                s1 = re.findall(t, title)
+                #s1 = re.findall("Sales|Manager|Lead|Senior|Mid-Level|Sr.|Sr|SR|SR.|Angular|React|Contract|SQL|Mid-level", title)    
+                s2 = re.findall(d, desc)
+                #s2 = re.findall("[1-9]-[1-9]|\d years|\d\+|5 plus|Sr.|Senior|Contract|\d months|\d Months|\+ year's|contract|\+ Years|\+ years", desc)
+                s3 = re.findall(c, company)
+                #s3 = re.findall("The Job Network|Revature|Kelly Services", company)
+                
                 original.append(items.string)
                 
                 if(not(s1) and not(s2) and not(s3) and len(desc) > 600):
                     links.append(items.string)
-                    with open("Results.txt", "a") as f:
+                    with open("Results.txt", "a", encoding='utf-8') as f:
                         print("_________________________________________________________________________________\n", file=f)
                         print(title, file=f)
                         print(company, file=f)
@@ -152,4 +172,13 @@ class LinkedInSearchSimplifier:
         
         
 if __name__ == "__main__":
-    Search = LinkedInSearchSimplifier("") #Insert your url here!
+    
+    url = input("Paste or Enter your URL here: ")
+    print()
+    title = input("Enter the title keywords to remove from the results seperated by '|' or enter 'None', if no keywords are needed. Ex: Manager|Senior: ")
+    print()
+    desc = input("Enter description keywords to remove from the results seperated by '|' or enter 'None', if no keywords are needed. Ex: 2\+ years|2-4: ")
+    print()
+    company = input("Enter a company that you want to exclude from the results seperated by '|' or enter 'None', if no keywords are needed. Ex: The Job Network|Revature: ")
+
+    Search = LinkedInSearchSimplifier(url, title, desc, company)
