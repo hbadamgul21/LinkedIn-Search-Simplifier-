@@ -16,7 +16,8 @@ This simplified and reduced my job search.
 
  
 -------------------------------------------------------------------------------
-
+NOTICE: As of now, this works when you are NOT signed in LinkedIn. If you are signed out, then you should be fine. 
+-------------------------------------------------------------------------------
 
 Usage with GUI:
 
