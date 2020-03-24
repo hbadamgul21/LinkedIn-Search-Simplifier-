@@ -3,6 +3,10 @@ Version: 1.0
 By: Hamid Badamgul
 
 
+UPDATE: 3/24/2020
+LinkedIn has implemented the infinite scroll; therefore, I adjusted the TitleParser.py file to make it work with the current LinkedIn scroll method.
+Also modified code on bottom of README to make it work with LinkedIn's infinite scroll. 
+
 
 BACKSTORY: 
 
@@ -75,7 +79,9 @@ FINAL NOTES:
 -You can provide your own regex in the input fields, if you have some knowledge with them. 
 -After getting the Results.txt, when you go back to the LinkedIn page to start searching for you matches, and don't want to keep pressing "See More Jobs" button, I have a simple solution for you that can help. On the page, open "Developer Tools" located at the far top right corner of Chrome, click the three dots and you should find the dev tools under "More Tools" area. Then go to the console and past this code and hit enter. 
 
-[BEGIN CODE]
+UPDATE: 3/24/2020 - This won't work on the current LinkedIn scroll method, as they changed it to infinite scrolling. Therefore, the new code is below the current code.  
+
+[BEGIN CODE] //WON'T WORK 
 //This function helps us get all the elements, in order to click on them after certain intervals, this case being every 1 second. 
 function clickMore()
  
@@ -97,7 +103,27 @@ setInterval(clickMore, 1000);
 
 [END CODE]   
 
-This code loads all of the contents of the page, by clicking on the "See More Jobs" button, this way you can easily use Ctrl-F to locate your matches from the .txt file. 
+UPDATED CODE - Infinite Scrolling
+
+[BEGIN CODE]
+
+var Scroll = function scrollDown() 
+{
+
+    
+	window.scrollTo(0,document.body.scrollHeight);
+
+
+}
+
+var Interval = setInterval(Scroll, 1000);
+
+//To STOP the scroll once it reached the end of the infinite scroll, type this in the dev tool:
+window.clearInterval(Interval);
+
+[END CODE]
+
+This code loads all of the contents of the page, by clicking on the "See More Jobs" (NEW: Infinite Scrolling) button, this way you can easily use Ctrl-F to locate your matches from the .txt file. 
  
 ---------------------
 | HAPPY SEARCHING!  |

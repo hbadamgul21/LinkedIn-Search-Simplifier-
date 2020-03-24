@@ -34,17 +34,29 @@ class LinkedInSearchSimplifier:
     #Once we reach the end, we exit. We have the data to use with BeautifulSoup now.
     def Get_All_The_Pages_Loaded(self):
         page_num = 0
+        SCROLL_PAUSE_TIME = 1.5
+        last_height = self.driver.execute_script("return document.body.scrollHeight")
         while(1):
-            #window.update()
-            try:
-                self.driver.find_element_by_xpath("//*[text()='See more jobs']").click()
-                page_num += 1
-                #page = tk.Label(window, text="Number of pages we are getting: " + str(page_num))
-                #page.grid(row = 6, column = 0)
-                print("Number of pages clicked: "+str(page_num))
-                sleep(1)
-            except NoSuchElementException:
+            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            page_num += 1
+            print("Number of pages clicked/scrolled: "+str(page_num))
+            sleep(SCROLL_PAUSE_TIME)
+            
+            new_height = self.driver.execute_script("return document.body.scrollHeight")
+            if new_height == last_height:
                 break
+            last_height = new_height
+        # while(1):
+            # #window.update()
+            # try:
+                # self.driver.find_element_by_xpath("//*[text()='See more jobs']").click()
+                # page_num += 1
+                # #page = tk.Label(window, text="Number of pages we are getting: " + str(page_num))
+                # #page.grid(row = 6, column = 0)
+                # print("Number of pages clicked: "+str(page_num))
+                # sleep(1)
+            # except NoSuchElementException:
+                # break
             
             
     #Grab the data we need, and perform certain actions to get the title, company name, and their descriptions. 
